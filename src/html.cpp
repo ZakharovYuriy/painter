@@ -2,18 +2,19 @@
 #include <unordered_map>
 #include <vector>
 #include <string>
+#include <memory>
 
 #include "html.h"
 
 using namespace std::literals;
 
-namespace HTML {
+namespace html {
 
     void ContainerElement::addAttribute(const std::string& name, const std::string& value){
         attributes_[name]=value;
     }
     
-    void ContainerElement::addElement(Element* element){
+    void ContainerElement::addElement(std::shared_ptr<Element> element){
         elements_.push_back(element);
     }
 
@@ -33,30 +34,29 @@ namespace HTML {
             html += element->Generate();
         }
 
-        html += "</" + type_ + ">";
+        html += "</" + type_ + ">\n";
 
         return html;
     }
 
     void Text::addText(const std::string& text){
-        text_ = text;
+        text_ += text;
     }
 
     std::string Text::Generate() const{
         return text_;
     }
 
-
-    void Document::addHeaderElement(Element* title){
+    void Document::addHeaderElement(std::shared_ptr<Element> title){
         header_.push_back(title);
     }
-    void Document::addBodyElement(Element* body){
+    void Document::addBodyElement(std::shared_ptr<Element> body){
         body_.push_back(body);
     }
 
     std::string Document::Generate() const{
         std::string html;
-        html = "<!DOCTYPE html>\n<html>\n   <head>"s;
+        html = "<!DOCTYPE html>\n<html>\n   <head>\n"s;
         
         for (auto const& element : header_) {
             html += element->Generate();

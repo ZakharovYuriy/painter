@@ -98,7 +98,6 @@ namespace graphics {
     // Выводит изображение, построенное в памяти, на печать
     void HTMLPrinterTable::Print(std::ostream& output){
         auto size = picture_.GetSize();
-        output<<"<table style=\"width: 100%\">"sv<<std::endl;
         for(int y = 0; y <= size.y; ++y){
             output<<"<tr>"sv;
             for(int x = 0; x <= size.x; ++x){
@@ -109,7 +108,6 @@ namespace graphics {
             }
             output<<"</tr>\n"sv;
         }
-        output<<"</table>"sv<<std::endl;
     }
 
     int HTMLPrinterTable::CountX(int y, Point first, Point last){
