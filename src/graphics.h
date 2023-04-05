@@ -10,12 +10,12 @@ namespace graphics {
     
     struct Point {
         Point() = default;
-        Point(double x, double y)
+        Point(int x, int y)
             : x(x)
             , y(y) {
         }
-        double x = 0;
-        double y = 0;
+        int x = 0;
+        int y = 0;
     };
 
     struct Color {
@@ -36,7 +36,7 @@ namespace graphics {
     class HTMLCanvas final {
     public:
         Color GetPixel(Point p);
-        void  SetPixel(Point p, Color color);
+        void SetPixel(Point p, Color color);
         Point GetSize();
         void ReSize(Point p);
     private:
@@ -112,8 +112,8 @@ namespace graphics {
         void Draw(Graphics& g) const override;
     private:
         Point left_top_;
-        double width_;
-        double height_;
+        int width_;
+        int height_;
     };
 
 
