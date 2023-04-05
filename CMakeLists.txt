@@ -17,6 +17,10 @@ file(GLOB sources
   src/main.cpp
   src/graphics.h
   src/graphics.cpp
+  src/html.h
+  src/html.cpp
+  src/tests.h
+  src/tests.cpp
 )
 
 add_executable(html_paint ${sources}) 

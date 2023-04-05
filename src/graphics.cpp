@@ -4,6 +4,8 @@
 
 #include "graphics.h"
 
+using namespace std::literals;
+
 namespace graph {
 
     Color HTMLCanvas::GetPixel(Point p){
@@ -26,13 +28,13 @@ namespace graph {
 
     void HTMLCanvas::ReSize(Point p){
         if (width_ < p.y){
-            canvas_.resize(p.y);
+            canvas_.resize(p.y+1);
             width_ = p.y;
         }
         if (height_ < p.x){
             height_ = p.x;
             for(auto& x : canvas_)
-                x.resize(p.x);
+                x.resize(p.x+1);
         }
     }
 
@@ -41,12 +43,10 @@ namespace graph {
     }
 
     void HTMLPrinterTable::MoveTo(Point p){
-        std::cout<<"move"<< p.x << " " << p.y <<std::endl;
         temp_point_ = p;
     }
 
     void HTMLPrinterTable::LineTo(Point p){
-        std::cout<<"move"<< p.x << " " << p.y <<std::endl;
         if(p.x == temp_point_.x){
             int first = std::min(temp_point_.y, p.y);
             int last = std::max(temp_point_.y, p.y);
@@ -71,10 +71,10 @@ namespace graph {
                 picture_.SetPixel(Point(x,CountY(x,temp_point_,p)),color_);
             }
         }
+        temp_point_ = p;
     }
 
     void HTMLPrinterTable::SetColor(Color color){
-        std::cout<<"set color"<<std::endl;
         color_ = color;
     }
     //изменяет размер полотна при указании точки вне поля
@@ -85,8 +85,20 @@ namespace graph {
     }
 
     // Выводит изображение, построенное в памяти, на печать
-    void HTMLPrinterTable::Print(std::iostream& output){
-        std::cout<<"print"<<std::endl;
+    void HTMLPrinterTable::Print(std::ostream& output){
+        auto size = picture_.GetSize();
+        output<<"<table style=\"width: 100%\">"sv<<std::endl;
+        for(int y = 0; y <= size.y; ++y){
+            output<<"<tr>"sv;
+            for(int x = 0; x <= size.x; ++x){
+                output << "<th style=\"background-color: rgb("sv;
+                auto color = picture_.GetPixel(Point(x,y));
+                output << color.r << " "sv << color.g << " "sv << color.b;
+                output <<")\"></th>\n"sv;
+            }
+            output<<"</tr>\n"sv;
+        }
+        output<<"</table>"sv<<std::endl;
     }
 
     int HTMLPrinterTable::CountX(int y, Point first, Point last){

@@ -18,14 +18,14 @@ namespace graph {
 
     struct Color {
         Color() = default;
-        Color(int r, int g, int b)
-            : r(),
-            g(),
-            b(){
+        Color(int R, int G, int B)
+            : r(R),
+            g(G),
+            b(B){
         }
-        int8_t r = 0;
-        int8_t g = 0;
-        int8_t b = 0;
+        int r = 255;
+        int g = 255;
+        int b = 255;
     };
 
     // Позволяет хранить и изменять изображение
@@ -67,7 +67,7 @@ namespace graph {
         void CorrectCanvasSize(Point p);
 
         // Выводит изображение, построенное в памяти, на печать
-        void Print(std::iostream& output);
+        void Print(std::ostream& output);
     private:
         /* Данные, необходимые для хранения изображения в памяти и вывода его на печать */  
         HTMLCanvas& picture_;
