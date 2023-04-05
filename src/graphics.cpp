@@ -6,7 +6,18 @@
 
 using namespace std::literals;
 
-namespace graph {
+namespace graphics {
+
+    Color RundomColor (){
+        // Создаем генератор случайных чисел mt19937
+        std::mt19937 rng{std::random_device{}()};
+
+        // Создаем распределение для генерации целых чисел от 0 до 255
+        std::uniform_int_distribution<int> distribution{0, 255};
+
+        // Генерируем случайные числа
+        return Color (distribution(rng),distribution(rng),distribution(rng));
+    }
 
     Color HTMLCanvas::GetPixel(Point p){
         if (PixelInArea(p))
@@ -124,8 +135,8 @@ namespace graph {
         g.LineTo(left_top_);
     }
 
-    void DrawPicture(const std::vector<const Drawable*>& picture, Graphics& g) {
-        for (const Drawable* drawable : picture) {
+    void DrawPicture(Objects picture, Graphics& g) {
+        for (auto drawable : picture) {
             drawable->Draw(g);
         }
     };

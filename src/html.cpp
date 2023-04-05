@@ -5,6 +5,8 @@
 
 #include "html.h"
 
+using namespace std::literals;
+
 namespace HTML {
 
     void ContainerElement::addAttribute(const std::string& name, const std::string& value){
@@ -37,11 +39,37 @@ namespace HTML {
     }
 
     void Text::addText(const std::string& text){
-        text_=text;
+        text_ = text;
     }
 
     std::string Text::Generate() const{
         return text_;
+    }
+
+
+    void Document::addHeaderElement(Element* title){
+        header_.push_back(title);
+    }
+    void Document::addBodyElement(Element* body){
+        body_.push_back(body);
+    }
+
+    std::string Document::Generate() const{
+        std::string html;
+        html = "<!DOCTYPE html>\n<html>\n   <head>"s;
+        
+        for (auto const& element : header_) {
+            html += element->Generate();
+        }
+
+        html += "   </head>\n  <body>\n"s;
+
+        for (auto const& element : body_) {
+            html += element->Generate();
+        }
+
+        html += "   </body>\n</html>\n"s;
+        return html;
     }
 
 }  // namespace graph

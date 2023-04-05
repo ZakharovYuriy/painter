@@ -9,6 +9,7 @@
 
 namespace HTML {
 
+    //Интерфейс элементов HTML документов
     class Element{
     public:
         virtual std::string Generate() const = 0;
@@ -33,6 +34,16 @@ namespace HTML {
         std::string Generate() const override;
     private:
         std::string text_;
+    };
+
+    class Document : public Element{
+    public:
+        void addHeaderElement(Element* title);
+        void addBodyElement(Element*);
+        std::string Generate() const override;
+    private:
+        std::vector<Element*>  header_;
+        std::vector<Element*>  body_;
     };
 
 }  // namespace graph

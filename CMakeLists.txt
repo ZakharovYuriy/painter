@@ -21,6 +21,8 @@ file(GLOB sources
   src/html.cpp
   src/tests.h
   src/tests.cpp
+  src/html_generator.h
+  src/html_generator.cpp
 )
 
 add_executable(html_paint ${sources}) 

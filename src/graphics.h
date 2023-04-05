@@ -1,11 +1,13 @@
 #pragma once
 
 #include <iostream>
+#include <memory>
 #include <string>
 #include <vector>
+#include <random>
 
-namespace graph {
-
+namespace graphics {
+    
     struct Point {
         Point() = default;
         Point(double x, double y)
@@ -27,6 +29,8 @@ namespace graph {
         int g = 255;
         int b = 255;
     };
+
+    Color RundomColor ();
 
     // Позволяет хранить и изменять изображение
     class HTMLCanvas final {
@@ -112,8 +116,11 @@ namespace graph {
         double height_;
     };
 
+
+    using Objects = std::vector<std::shared_ptr<graphics::Drawable>>;
+    
     void DrawElement(const Drawable* element, Graphics& g);
 
-    void DrawPicture(const std::vector<const Drawable*>& picture, Graphics& g);
+    void DrawPicture(Objects picture, Graphics& g);
 
 }  // namespace graph
