@@ -9,6 +9,6 @@ namespace tests {
 
     void GeneralGraphicsTest (std::ostream& out);
 
-    void ParsingRectangles(std::ostream& out);
+    void ParsingRectanglesFromFile(std::ostream& out);
 
 }  // namespace graph

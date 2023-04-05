@@ -18,12 +18,12 @@ void GenerateHTML (std::string_view path, std::string file_name){
 int main(int argc, char *argv[]) {
     using namespace std::literals;
 
-    if(argc > 0){
+    if(argc > 1){
         const std::string_view path(argv[1]);
         GenerateHTML(path, "output.html"s);
     }else{
         std::cout<<"Running tests"s;
-        tests::ParsingRectangles(std::cerr);
+        tests::ParsingRectanglesFromFile(std::cerr);
         tests::GeneralGraphicsTest(std::cerr);
     }
 

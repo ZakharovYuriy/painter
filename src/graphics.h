@@ -33,16 +33,30 @@ namespace graphics {
     Color RundomColor ();
 
     // Позволяет хранить и изменять изображение
-    class HTMLCanvas final {
+
+    class Canvas {
     public:
-        Color GetPixel(Point p);
-        void SetPixel(Point p, Color color);
-        Point GetSize();
-        void ReSize(Point p);
+        virtual Color GetPixel(Point p) = 0;
+        virtual void SetPixel(Point p, Color color) = 0;
+        virtual Point GetSize() = 0;
+        virtual void ReSize(Point p) = 0;
+        virtual void Print() = 0;
+    };
+
+    class HTMLCanvas final : public Canvas {
+    public:
+        HTMLCanvas (std::ostream& out):output_(out){
+        };
+        Color GetPixel(Point p) override;
+        void SetPixel(Point p, Color color) override;
+        Point GetSize() override;
+        void ReSize(Point p) override;
+        void Print() override;
     private:
+        std::ostream& output_;
         std::vector<std::vector<Color>> canvas_;
-        int width_ = 0;
-        int height_ = 0;
+        int width_ = -1;
+        int height_ = -1;
 
         bool PixelInArea(Point p);
     };
@@ -57,10 +71,12 @@ namespace graphics {
     };
 
     // Позволяет выводить изображение
-    class HTMLPrinterTable : public Graphics {
+    // В данной реализации принтера размер поля и ячек вычисляется
+    // автоматически таким образм - чтобы вместить все элементы
+    class SimplePrinter : public Graphics {
     public:
-        HTMLPrinterTable(HTMLCanvas& picture)
-            :picture_(picture){
+        SimplePrinter(Canvas& canvas)
+            :canvas_(canvas){
         }
         // Реализация методов Graphics. Выполняет построение изображения в памяти компьютера
         void MoveTo(Point p) override;
@@ -71,15 +87,17 @@ namespace graphics {
         void CorrectCanvasSize(Point p);
 
         // Выводит изображение, построенное в памяти, на печать
-        void Print(std::ostream& output);
+        void Print();
     private:
         /* Данные, необходимые для хранения изображения в памяти и вывода его на печать */  
-        HTMLCanvas& picture_;
+        Canvas& canvas_;
         Color color_;  
         Point temp_point_;  
 
         int CountX(int y, Point first, Point last);
         int CountY(int x, Point first, Point last);
+        //определение максимального размера поля
+        Point MaxFieldSize(Point p1,Point p2);
     }; 
 
     /*

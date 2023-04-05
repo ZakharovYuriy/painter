@@ -38,14 +38,16 @@ namespace graphics {
     }
 
     void HTMLCanvas::ReSize(Point p){
-        if (width_ < p.y){
+        if (height_ < p.y){
             canvas_.resize(p.y+1);
-            width_ = p.y;
+            for(int i = height_;  i < canvas_.size(); ++ i)
+                canvas_[i].resize(width_+1);
+            height_ = p.y;
         }
-        if (height_ < p.x){
-            height_ = p.x;
-            for(auto& x : canvas_)
-                x.resize(p.x+1);
+        if (width_ < p.x){
+            width_ = p.x;
+            for(auto& y : canvas_)
+                y.resize(p.x+1);
         }
     }
 
@@ -53,67 +55,75 @@ namespace graphics {
         return p.x <= width_ && p.y <= height_; 
     }
 
-    void HTMLPrinterTable::MoveTo(Point p){
+    void HTMLCanvas::Print(){
+        for(int y = 0; y <= height_; ++y){
+            output_<<"<tr>"sv;
+            for(int x = 0; x <= width_; ++x){
+                output_ << "<th style=\"background-color: rgb("sv;
+                auto color = GetPixel(Point(x,y));
+                output_ << color.r << " "sv << color.g << " "sv << color.b;
+                output_ <<")\"></th>\n"sv;
+            }
+            output_<<"</tr>\n"sv;
+        }
+    }
+
+    void SimplePrinter::MoveTo(Point p){
         temp_point_ = p;
     }
 
-    void HTMLPrinterTable::LineTo(Point p){
+    void SimplePrinter::LineTo(Point p){
+        canvas_.ReSize(MaxFieldSize(p,temp_point_));
         if(p.x == temp_point_.x){
             int first = std::min(temp_point_.y, p.y);
             int last = std::max(temp_point_.y, p.y);
             for(int y = first; y <= last; ++y){
-                picture_.SetPixel(Point(p.x,y),color_);
+                canvas_.SetPixel(Point(p.x,y),color_);
             }
         }else if(p.y == temp_point_.y){
             int first = std::min(temp_point_.x, p.x);
             int last = std::max(temp_point_.x, p.x);
             for(int x = first; x <= last; ++x){
-                    picture_.SetPixel(Point(x,p.y),color_);
+                    canvas_.SetPixel(Point(x,p.y),color_);
             }
         }else{
             int first_y = std::min(temp_point_.y, p.y);
             int last_y = std::max(temp_point_.y, p.y);
             for(int y = first_y; y <= last_y; ++y){
-                picture_.SetPixel(Point(CountX(y,temp_point_,p),y),color_);
+                canvas_.SetPixel(Point(CountX(y,temp_point_,p),y),color_);
             }
             int first_x = std::min(temp_point_.x, p.x);
             int last_x = std::max(temp_point_.x, p.x);
             for(int x = first_x; x <= last_x; ++x){
-                picture_.SetPixel(Point(x,CountY(x,temp_point_,p)),color_);
+                canvas_.SetPixel(Point(x,CountY(x,temp_point_,p)),color_);
             }
         }
         temp_point_ = p;
     }
 
-    void HTMLPrinterTable::SetColor(Color color){
+    Point SimplePrinter::MaxFieldSize(Point p1, Point p2){
+        return Point(std::max(p1.x,p2.x),std::max(p1.y,p2.y));
+    }
+
+    void SimplePrinter::SetColor(Color color){
         color_ = color;
     }
     //изменяет размер полотна при указании точки вне поля
-    void HTMLPrinterTable::CorrectCanvasSize(Point p){
-        if(picture_.GetSize().x < p.x || picture_.GetSize().y < p.y){
-            picture_.ReSize(p);
+    void SimplePrinter::CorrectCanvasSize(Point p){
+        if(canvas_.GetSize().x < p.x || canvas_.GetSize().y < p.y){
+            canvas_.ReSize(p);
         }
     }
 
     // Выводит изображение, построенное в памяти, на печать
-    void HTMLPrinterTable::Print(std::ostream& output){
-        auto size = picture_.GetSize();
-        for(int y = 0; y <= size.y; ++y){
-            output<<"<tr>"sv;
-            for(int x = 0; x <= size.x; ++x){
-                output << "<th style=\"background-color: rgb("sv;
-                auto color = picture_.GetPixel(Point(x,y));
-                output << color.r << " "sv << color.g << " "sv << color.b;
-                output <<")\"></th>\n"sv;
-            }
-            output<<"</tr>\n"sv;
-        }
+    void SimplePrinter::Print(){
+        canvas_.Print();
     }
 
-    int HTMLPrinterTable::CountX(int y, Point first, Point last){
+    int SimplePrinter::CountX(int y, Point first, Point last){
         return static_cast<int>(static_cast<double>(y - first.y) * (last.x - first.x) / (last.y - first.y) + first.x);
     }    
-    int HTMLPrinterTable::CountY(int x, Point first, Point last){
+    int SimplePrinter::CountY(int x, Point first, Point last){
         return static_cast<int>((static_cast<double>(last.y - first.y)/(last.x - first.x)) * (x - first.x) + first.y);
     } 
 

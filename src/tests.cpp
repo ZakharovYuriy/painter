@@ -23,28 +23,27 @@ namespace tests {
         rects.push_back(std::make_shared<Rectangle>(r2));
 
         //создаем лист для рисования HTMLCanvas
-        HTMLCanvas list;
-        list.ReSize(Point(10,10));
-        HTMLPrinterTable table(list); 
-        DrawPicture(rects,table);
-
-        table.Print(out);
+        HTMLCanvas list(out);
+        //list.ReSize(Point(10,10));
+        SimplePrinter table_printer(list); 
+        DrawPicture(rects,table_printer);
+        table_printer.Print();
     }
 
-    void ParsingRectangles(std::ostream& out){
-
-        auto path = std::filesystem::canonical("/home/yuriy/Документы/собеседование/тестовые/painter/tests/two_squares");
+    void ParsingRectanglesFromFile(std::ostream& out){
+        auto path = std::filesystem::canonical("./../tests/multyple");//two_squares
+        out <<" path is->"<< path;
         std::ifstream input_file(path);
 
         if(input_file){
             //создаем лист для рисования HTMLCanvas
-            graphics::HTMLCanvas list;
-            list.ReSize(graphics::Point(10,10));
-            graphics::HTMLPrinterTable table(list);
+            graphics::HTMLCanvas list(out);
+            //list.ReSize(graphics::Point(10,10));
+            graphics::SimplePrinter table_printer(list);
 
-            DrawPicture (generator::ReadRectangles(input_file),table);
+            DrawPicture (generator::ReadRectangles(input_file),table_printer);
 
-            table.Print(out);
+            table_printer.Print();
         }else{
             throw std::runtime_error("Error opening file");
         }

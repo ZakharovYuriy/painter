@@ -32,14 +32,20 @@ namespace generator{
         title_el->addElement(std::make_shared<html::Text>("Graphic Table"s));
         doc.addHeaderElement(title_el);
 
-        //создаем лист для рисования HTMLCanvas
-        graphics::HTMLCanvas list;
-        list.ReSize(graphics::Point(10,10));
-        graphics::HTMLPrinterTable table(list);
-        DrawPicture (objects,table);
+        auto style_el = std::make_shared<html::ContainerElement>("style"s);
+        style_el->addElement(std::make_shared<html::Text>(
+            "html,body {height: 100%; margin: 0; padding: 0;}\n"s + 
+            "table {width: 100%; height: 100%;}"s
+        ));
+        doc.addHeaderElement(style_el);
 
+        //создаем лист для рисования HTMLCanvas
         std::ostringstream str;
-        table.Print(str);
+        graphics::HTMLCanvas list(str);
+        
+        graphics::SimplePrinter table_printer(list);
+        DrawPicture (objects,table_printer);      
+        table_printer.Print();
 
         auto table_el = std::make_shared<html::ContainerElement>("table"s);
         table_el->addElement(std::make_shared<html::Text>(str.str()));
