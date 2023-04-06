@@ -10,7 +10,6 @@
 using namespace graphics;
 
 namespace tests {
-
     void GeneralGraphicsTest (std::ostream& out){
         Objects rects;
         auto r1 = Rectangle(Point(1,1),Point(5,5));
@@ -36,9 +35,7 @@ namespace tests {
         std::ifstream input_file(path);
 
         if(input_file){
-            //создаем лист для рисования HTMLCanvas
             graphics::HTMLCanvas list(out);
-            //list.ReSize(graphics::Point(10,10));
             graphics::SimplePrinter table_printer(list);
 
             DrawPicture (generator::ReadRectangles(input_file),table_printer);
@@ -49,4 +46,4 @@ namespace tests {
         }
     }
 
-}  // namespace graph
+}  // namespace tests

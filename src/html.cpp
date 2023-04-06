@@ -23,6 +23,7 @@ namespace html {
         html += "<" + type_;
 
         // Добавляем атрибуты
+        // Adding attributes
         for (auto const& [name, value] : attributes_) {
             html += " " + name + "=\"" + value + "\"";
         }
@@ -30,6 +31,7 @@ namespace html {
         html += ">";
 
         // Добавляем вложенные элементы
+        // Adding nested elements
         for (auto const& element : elements_) {
             html += element->Generate();
         }
@@ -72,4 +74,4 @@ namespace html {
         return html;
     }
 
-}  // namespace graph
+}  // namespace html

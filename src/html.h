@@ -10,6 +10,7 @@
 namespace html {
 
     //Интерфейс элементов HTML документов
+    //Interface of HTML document elements
     class IElement{
     public:
         virtual std::string Generate() const = 0;
@@ -17,6 +18,8 @@ namespace html {
 
     using Elements = std::vector<std::shared_ptr<IElement>>;
 
+    // Элемент состоящий из других элементов
+    // An element consisting of other elements
     class ContainerElement : public IElement{
     public:
         ContainerElement(const std::string& type):type_(type){
@@ -30,6 +33,8 @@ namespace html {
         Elements elements_;
     };
 
+    // Элемент состоящий только из текста
+    // An element consisting only of text
     class Text : public IElement{
     public:
         Text (const std::string& text):text_(text){
@@ -40,6 +45,8 @@ namespace html {
         std::string text_;
     };
 
+    // Элемент который группирует все остальные элементы в Header и Body
+    // An element that groups all other elements into Header and Body
     class Document : public IElement{
     public:
         void addHeaderElement(std::shared_ptr<IElement> title);
@@ -50,4 +57,4 @@ namespace html {
         Elements body_;
     };
 
-}  // namespace graph
+}  // namespace html

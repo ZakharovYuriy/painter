@@ -9,13 +9,13 @@ using namespace std::literals;
 namespace graphics {
 
     Color RundomColor (){
-        // Создаем генератор случайных чисел mt19937
+        // Creating a random number generator mt19937
         std::mt19937 rng{std::random_device{}()};
 
-        // Создаем распределение для генерации целых чисел от 0 до 255
+        // Creating a distribution to generate integers from 0 to 255
         std::uniform_int_distribution<int> distribution{0, 255};
 
-        // Генерируем случайные числа
+        // Generating random numbers
         return Color (distribution(rng),distribution(rng),distribution(rng));
     }
 
@@ -73,20 +73,26 @@ namespace graphics {
     }
 
     void SimplePrinter::LineTo(Point p){
+        // Scaling the canvas when a point hits outside the field
         canvas_.ReSize(MaxFieldSize(p,temp_point_));
+        // Drawing a horizontal line
         if(p.x == temp_point_.x){
             int first = std::min(temp_point_.y, p.y);
             int last = std::max(temp_point_.y, p.y);
             for(int y = first; y <= last; ++y){
                 canvas_.SetPixel(Point(p.x,y),color_);
             }
-        }else if(p.y == temp_point_.y){
+        }
+        // Drawing a vertical line
+        else if(p.y == temp_point_.y){
             int first = std::min(temp_point_.x, p.x);
             int last = std::max(temp_point_.x, p.x);
             for(int x = first; x <= last; ++x){
                     canvas_.SetPixel(Point(x,p.y),color_);
             }
-        }else{
+        }
+        // Drawing a diagonal line
+        else{
             int first_y = std::min(temp_point_.y, p.y);
             int last_y = std::max(temp_point_.y, p.y);
             for(int y = first_y; y <= last_y; ++y){
@@ -109,7 +115,6 @@ namespace graphics {
         color_ = color;
     }
 
-    // Выводит изображение, построенное в памяти, на печать
     void SimplePrinter::Print(){
         canvas_.Print();
     }

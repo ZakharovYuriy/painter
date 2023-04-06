@@ -5,6 +5,8 @@
 #include "tests.h"
 #include "html_generator.h"
 
+// Открываем файлы на чтение и запись при успешном открытии - генерируем HTML страницу
+// Open files for reading and writing on successful opening - generate an HTML page
 void GenerateHTML (std::string_view path, std::string file_name){
     std::ifstream input_file(std::filesystem::canonical(path));
     std::ofstream output_file(file_name);
