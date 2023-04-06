@@ -93,6 +93,15 @@ cmake --build .
 ```
 3. Готовая программа сохранена в папку `bin` в корневой дирректории проекта:<br>
 
+# Graphics UML
 
+<picture>
+  <img alt="Graphics UML" src="https://github.com/ZakharovYuriy/painter/blob/main/UML/Graphics.PNG">
+</picture>
 
+# HTML UML
+
+<picture>
+  <img alt="HTML UML" src="https://github.com/ZakharovYuriy/painter/blob/main/UML/XML.PNG">
+</picture>
 
