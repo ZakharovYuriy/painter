@@ -69,13 +69,13 @@ docker run\
 ```
 
 - `--rm` in Docker is used to automatically delete the container and its associated files when the container is shut down.<br>
-- `--`-v ${PWD}/tests:/app/tests` is used to create a link between the host file system and the container file system.<br>
+- `-v ${PWD}/tests:/app/tests` is used to create a link between the host file system and the container file system.<br>
  	Allows you to add new files to run in the container. All files located in the `tests` folder, <br>
  	located in the same directory from where the container is launched, they become available inside the container<br>
  	and can be used to pass as a parameter to the program.<br>
 - `-it` starts the container in interactive mode with connection to the container terminal.<br>
 - `-p 80:8080` is used to bind container ports to host ports.<br>
-- `two_squares' - parameter passed to the program running in the container,<br>
+- `two_squares` - parameter passed to the program running in the container,<br>
  	 allows you to pass the path to the file located in the `tests` folder by its name.<br>
 
 # Assembly using Cmake
