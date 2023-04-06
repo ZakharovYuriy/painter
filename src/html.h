@@ -10,19 +10,19 @@
 namespace html {
 
     //Интерфейс элементов HTML документов
-    class Element{
+    class IElement{
     public:
         virtual std::string Generate() const = 0;
     };
 
-    using Elements = std::vector<std::shared_ptr<Element>>;
+    using Elements = std::vector<std::shared_ptr<IElement>>;
 
-    class ContainerElement : public Element{
+    class ContainerElement : public IElement{
     public:
         ContainerElement(const std::string& type):type_(type){
         }
         void addAttribute(const std::string& name, const std::string& value);
-        void addElement(std::shared_ptr<Element>);
+        void addElement(std::shared_ptr<IElement>);
         std::string Generate() const override;
     private:
         std::string type_;
@@ -30,7 +30,7 @@ namespace html {
         Elements elements_;
     };
 
-    class Text : public Element{
+    class Text : public IElement{
     public:
         Text (const std::string& text):text_(text){
         };
@@ -40,10 +40,10 @@ namespace html {
         std::string text_;
     };
 
-    class Document : public Element{
+    class Document : public IElement{
     public:
-        void addHeaderElement(std::shared_ptr<Element> title);
-        void addBodyElement(std::shared_ptr<Element> body);
+        void addHeaderElement(std::shared_ptr<IElement> title);
+        void addBodyElement(std::shared_ptr<IElement> body);
         std::string Generate() const override;
     private:
         Elements header_;

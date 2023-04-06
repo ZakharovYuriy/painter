@@ -34,7 +34,7 @@ namespace graphics {
 
     // Позволяет хранить и изменять изображение
 
-    class Canvas {
+    class ICanvas {
     public:
         virtual Color GetPixel(Point p) = 0;
         virtual void SetPixel(Point p, Color color) = 0;
@@ -43,7 +43,7 @@ namespace graphics {
         virtual void Print() = 0;
     };
 
-    class HTMLCanvas final : public Canvas {
+    class HTMLCanvas final : public ICanvas {
     public:
         HTMLCanvas (std::ostream& out):output_(out){
         };
@@ -62,7 +62,7 @@ namespace graphics {
     };
 
     // Интерфейс Graphics предоставляет методы для рисования графических примитивов
-    class Graphics {
+    class IGraphics {
     public:
         virtual void MoveTo(Point p) = 0;
         virtual void LineTo(Point p) = 0;
@@ -73,9 +73,9 @@ namespace graphics {
     // Позволяет выводить изображение
     // В данной реализации принтера размер поля и ячек вычисляется
     // автоматически таким образм - чтобы вместить все элементы
-    class SimplePrinter : public Graphics {
+    class SimplePrinter : public IGraphics {
     public:
-        SimplePrinter(Canvas& canvas)
+        SimplePrinter(ICanvas& canvas)
             :canvas_(canvas){
         }
         // Реализация методов Graphics. Выполняет построение изображения в памяти компьютера
@@ -83,14 +83,11 @@ namespace graphics {
         void LineTo(Point p) override;
 
         void SetColor(Color color);
-        //изменяет размер полотна при указании точки вне поля
-        void CorrectCanvasSize(Point p);
-
         // Выводит изображение, построенное в памяти, на печать
         void Print();
     private:
         /* Данные, необходимые для хранения изображения в памяти и вывода его на печать */  
-        Canvas& canvas_;
+        ICanvas& canvas_;
         Color color_;  
         Point temp_point_;  
 
@@ -103,15 +100,15 @@ namespace graphics {
     /*
      * Интерфейс Drawable задаёт объекты, которые можно нарисовать с помощью Graphics
      */
-    class Drawable {
+    class IDrawable {
     public:
-        virtual void Draw(Graphics& g) const = 0;
-        virtual ~Drawable() = default;
+        virtual void Draw(IGraphics& g) const = 0;
+        virtual ~IDrawable() = default;
     };
 
     // Класс Shape наследуется от Drawable, но не реализует метод Draw.
     // Это должны будут сделать подклассы Shape
-    class Shape : public Drawable {
+    class Shape : public IDrawable {
     public:
         Color GetColor() const;
         void SetColor(Color color);
@@ -127,7 +124,7 @@ namespace graphics {
             height_(right_bottom.y - left_top.y){
         }
 
-        void Draw(Graphics& g) const override;
+        void Draw(IGraphics& g) const override;
     private:
         Point left_top_;
         int width_;
@@ -135,10 +132,10 @@ namespace graphics {
     };
 
 
-    using Objects = std::vector<std::shared_ptr<graphics::Drawable>>;
+    using Objects = std::vector<std::shared_ptr<graphics::IDrawable>>;
     
-    void DrawElement(const Drawable* element, Graphics& g);
+    void DrawElement(const IDrawable* element, IGraphics& g);
 
-    void DrawPicture(Objects picture, Graphics& g);
+    void DrawPicture(Objects picture, IGraphics& g);
 
 }  // namespace graph

@@ -108,12 +108,6 @@ namespace graphics {
     void SimplePrinter::SetColor(Color color){
         color_ = color;
     }
-    //изменяет размер полотна при указании точки вне поля
-    void SimplePrinter::CorrectCanvasSize(Point p){
-        if(canvas_.GetSize().x < p.x || canvas_.GetSize().y < p.y){
-            canvas_.ReSize(p);
-        }
-    }
 
     // Выводит изображение, построенное в памяти, на печать
     void SimplePrinter::Print(){
@@ -127,14 +121,14 @@ namespace graphics {
         return static_cast<int>((static_cast<double>(last.y - first.y)/(last.x - first.x)) * (x - first.x) + first.y);
     } 
 
-    void DrawElement(const Drawable* element, Graphics& g) {
+    void DrawElement(const IDrawable* element, IGraphics& g) {
         element->Draw(g);
     };
 
     Color Shape::GetColor() const { return color_; }
     void Shape::SetColor(Color color) { color_ = color; }
 
-    void Rectangle::Draw(Graphics& g) const {
+    void Rectangle::Draw(IGraphics& g) const {
         g.SetColor(GetColor());
         g.MoveTo(left_top_);
         g.LineTo({left_top_.x + width_, left_top_.y});
@@ -143,7 +137,7 @@ namespace graphics {
         g.LineTo(left_top_);
     }
 
-    void DrawPicture(Objects picture, Graphics& g) {
+    void DrawPicture(Objects picture, IGraphics& g) {
         for (auto drawable : picture) {
             drawable->Draw(g);
         }

@@ -14,7 +14,7 @@ namespace html {
         attributes_[name]=value;
     }
     
-    void ContainerElement::addElement(std::shared_ptr<Element> element){
+    void ContainerElement::addElement(std::shared_ptr<IElement> element){
         elements_.push_back(element);
     }
 
@@ -47,10 +47,10 @@ namespace html {
         return text_;
     }
 
-    void Document::addHeaderElement(std::shared_ptr<Element> title){
+    void Document::addHeaderElement(std::shared_ptr<IElement> title){
         header_.push_back(title);
     }
-    void Document::addBodyElement(std::shared_ptr<Element> body){
+    void Document::addBodyElement(std::shared_ptr<IElement> body){
         body_.push_back(body);
     }
 
