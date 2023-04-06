@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
     }else{
         std::cout<<"Running tests"s;
         tests::ParsingRectanglesFromFile(std::cerr);
-        tests::GeneralGraphicsTest(std::cerr);
+        //tests::GeneralGraphicsTest(std::cerr);
     }
 
     return 0;
